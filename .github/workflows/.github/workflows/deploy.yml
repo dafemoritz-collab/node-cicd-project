@@ -13,14 +13,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Deploy to EC2 via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd ~/node-cicd-project/node-cicd-project
-            git pull origin main
-            npm install
-            pm2 restart app || pm2 start app.js --name "node-app"
+     - name: Deploy to EC2 via SSH
+  uses: appleboy/ssh-action@v1.0.3
+  with:
+    host: ${{ secrets.EC2_HOST }}
+    username: ubuntu
+    key: ${{ secrets.EC2_SSH_KEY }}
+    port: 22
+    script: |
+      cd ~/node-cicd-project/node-cicd-project
+      git pull origin master
+      npm install
+      pm2 restart node-app || pm2 start app.js --name "node-app"
